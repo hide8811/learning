@@ -1,11 +1,11 @@
-# freezon_string_literal: true
+# frozen_string_literal: true
 
-n = gets.to_i
+gets.to_i
 ary = gets.split.map(&:to_i)
 shift_count = 0
 
 while ary.all?(&:even?)
-  ary.map!{ |num| num / 2 }
+  ary.map! { |num| num / 2 }
   shift_count += 1
 end
 
