@@ -16,14 +16,8 @@ while total_amount(x, y, z) != yen
     break
   end
 
-  if total_amount(x, y, z) > yen
-    y -= 1
-    z += 1
-
-  else
-    y -= 1
-    x += 1
-  end
+  total_amount(x, y, z) > yen ? z += 1 : x += 1
+  y -= 1
 end
 
 puts "#{x} #{y} #{z}"
