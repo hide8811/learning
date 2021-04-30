@@ -52,3 +52,32 @@ q.times do
 end
 
 puts [s_first_half, s_second_half].flatten.pack('c*')
+
+# 別解 ========================================
+
+n = gets.to_i
+s = gets.chomp.bytes
+q = gets.to_i
+
+change = false
+
+q.times do
+  t, a, b = gets.split.map(&:to_i)
+
+  if t == 1
+    if change
+      a = a < n ? a + n : a - n
+      b = b < n ? b + n : a - n
+    end
+
+    a -= 1
+    b -= 1
+    s[a], s[b] = s[b], s[a]
+  else
+    change = !change
+  end
+end
+
+s[0, n], s[n, n] = s[n, n], s[0, n] if change
+
+puts s.pack('c*')
