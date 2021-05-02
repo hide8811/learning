@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>Dialog</title>
+  </head>
+
+  <body>
+    <button type='button' id='alert'>警告(alert)</button>
+    <button type='button' id='promt'>入力(promt)</button>
+    <div id='content_acqusition'></div>
+    <button type='button' id='confirm'>確認(confirm)</button>
+
+    <script>
+      // alert
+      const alertButton = document.getElementById('alert');
+
+      alertButton.addEventListener('click', () => {
+        alert('警告');
+      });
+
+      //promt
+      const promtButton = document.getElementById('promt');
+      const contentAcqusition = document.getElementById('content_acqusition');
+
+      promtButton.addEventListener('click', () => {
+        const inputContent = prompt('入力');
+
+        contentAcqusition.insertAdjacentHTML('beforeend', inputContent);
+      });
+
+      // confirm
+      const confirmButton = document.getElementById('confirm');
+
+      confirmButton.addEventListener('click', () => {
+        confirm('確認');
+      });
+    </script>
+  <body>
+</html>
