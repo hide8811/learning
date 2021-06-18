@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/all.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Password Form</title>
+
+  </head>
+
+  <body>
+    <div class="form">
+      <div class="password-item">
+        <div class="password-item__required_charactoer">
+          <span id="alphabet-upper_case">大文字</span>
+          ・
+          <span id="alphabet-lower_case">小文字</span>
+          ・
+          <span id="number">数字</span>
+          ・
+          <span id="symbol">記号(! @ # $ % ^ &amp; * - = _ + &lt; &gt; ?)</span>
+        </div>
+        <label for="password" class="password-item__label">Password:</label>
+        <input type="password" id="password" name="password" class="password-item__input_field">
+        <div id="password-type_change" class="password-type_change">
+          <i class="fas fa-eye"></i>
+        </div>
+        <div id="security" class="security">
+          <i class="far fa-lightbulb"></i>
+          <i class="far fa-lightbulb"></i>
+          <i class="far fa-lightbulb"></i>
+          <i class="far fa-lightbulb"></i>
+        </div>
+      </div>
+
+      <div class="confirm_password-item">
+        <label for="confirm_password" class="confirm_password-item__label">Confirm Password:</label>
+        <input type="password" id="confirm_password" name="confirm_password" class="confirm_password-item__input_field">
+        <div id="confirm_password-type_change" class="confirm_password-type_change">
+          <i class="fas fa-eye"></i>
+        </div>
+      </div>
+
+      <div class="password_check">
+        <input type="button" value="Password Check" id="password_check_btn" class="password_check__btn">
+      </div>
+
+      <div id="message" class="message">
+        <!-- jsでメッセージ表示 -->
+      </div>
+    </div>
+  </body>
+</html>
