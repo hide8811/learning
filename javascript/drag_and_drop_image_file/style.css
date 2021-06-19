@@ -1,0 +1,74 @@
+.image-zone {
+  position: relative;
+  width: 60vw;
+  height: 50vw;
+  margin: 0 auto;
+}
+
+.preview-zone {
+  width: 60vw;
+  height: 50vw;
+  margin: 0 auto;
+}
+
+.preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.drop-zone {
+  position: absolute;
+  top: 0;
+  right: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  width: 60vw;
+  height: 50vw;
+  margin: 0 auto;
+  text-align: center;
+  border: 10px dotted #b28c6e;
+  border-radius: 40px;
+}
+
+.hide {
+  opacity: 0;
+}
+
+.message {
+  margin: 0 auto;
+  font-family:
+    "Helvetica Neue",
+    "Helvetica",
+    "Hiragino Sans",
+    "Hiragino Kaku Gothic ProN",
+    "Arial",
+    "Yu Gothic",
+    "Meiryo",
+    sans-serif;
+  color: #b28c6e;
+
+  /*
+  `#drop-zone`の`dragleave`イベントが
+  子要素で発火されないようにするため。
+  */
+  pointer-events: none;
+}
+
+.btn-field {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+.cancel-btn {
+  display: inline-block;
+  padding: 2rem;
+  margin: 0 auto;
+  background-color: #e6cde3;
+  border-radius: 15px;
+}
+
+.input-file {
+  display: none;
+}
