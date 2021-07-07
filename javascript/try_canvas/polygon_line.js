@@ -27,3 +27,13 @@ polygonLineContext.lineTo(160, 50);
 polygonLineContext.closePath();
 
 polygonLineContext.stroke();
+
+// 塗りつぶし
+polygonLineContext.beginPath();
+polygonLineContext.moveTo(230, 10);
+polygonLineContext.lineTo(280, 10);
+polygonLineContext.lineTo(280, 60);
+polygonLineContext.lineTo(230, 60);
+polygonLineContext.closePath();
+polygonLineContext.fillStyle = '#ff0000'; // 色の指定
+polygonLineContext.fill(); // 塗りつぶす
