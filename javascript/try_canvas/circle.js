@@ -33,3 +33,21 @@ circleContext.stroke();
 circleContext.beginPath();
 circleContext.arc(360, 40, 30, 1 * Math.PI, 2 * Math.PI);
 circleContext.stroke();
+
+// 円弧
+circleContext.beginPath();
+circleContext.moveTo(10, 90);
+circleContext.arcTo(50, 90, 50, 150, 40);
+circleContext.stroke();
+
+circleContext.beginPath();
+circleContext.moveTo(80, 90);
+circleContext.lineTo(130, 90);
+circleContext.arcTo(160, 90, 200, 150, 30);
+circleContext.lineTo(200, 150);
+circleContext.stroke();
+
+// arcTo(x1, y1, x2, y2, r);
+// 直前の座標(x0, y0)から(x1, y1)までのラインと、
+// (x1, y1)から(x2, y2)までのラインの交点を、
+// 半径rの円弧で繋ぐ。
