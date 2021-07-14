@@ -48,20 +48,24 @@ n_ary = number.split('')
 point_index = n_ary.index('.')
 
 after_number_b =
-  if original_radix.not_ten? && after_radix.ten? && point_index
-    integral = n_ary[0..(point_index - 1)]
-    decimal = n_ary[(point_index + 1)..-1]
+  if original_radix.not_ten? && after_radix.ten?
+    if point_index
+      integral = n_ary[0..(point_index - 1)]
+      decimal = n_ary[(point_index + 1)..-1]
 
-    integral_sum =
-      integral.reverse.each_with_index.inject(0) { |sum, (elem, i)| sum + (elem.to_i * original_radix**i) }
+      integral_sum =
+        integral.reverse.each_with_index.inject(0) { |sum, (elem, i)| sum + (elem.to_i * original_radix**i) }
 
-    decimal_sum =
-      decimal.each_with_index.inject(0) do |sum, (elem, i)|
-        product = BigDecimal(elem) * BigDecimal(original_radix.to_s)**-BigDecimal((i + 1).to_s)
-        (BigDecimal(sum.to_s) + BigDecimal(product.to_s)).to_f
-      end
+      decimal_sum =
+        decimal.each_with_index.inject(0) do |sum, (elem, i)|
+          product = BigDecimal(elem) * BigDecimal(original_radix.to_s)**-BigDecimal((i + 1).to_s)
+          (BigDecimal(sum.to_s) + BigDecimal(product.to_s)).to_f
+        end
 
-    integral_sum + decimal_sum
+      integral_sum + decimal_sum
+    else
+      n_ary.reverse.each_with_index.inject(0) { |sum, (elem, i)| sum + (elem.to_i * original_radix**i) }
+    end
   end
 
 puts # 空行
