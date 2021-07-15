@@ -39,8 +39,8 @@ puts "結果: #{after_number_a}"
 # ===============================================
 
 # 計算使用 ======================================
-if original_radix == after_radix
-  puts number
+if original_radix == after_radix || number == '0'
+  puts "結果: #{number}"
   exit
 end
 
@@ -67,7 +67,6 @@ after_number_b =
       n_ary.reverse.each_with_index.inject(0) { |sum, (elem, i)| sum + (elem.to_i * original_radix**i) }
     end
   elsif original_radix.ten? && after_radix.not_ten?
-    # number == 0 のとき？
     if point_index.nil?
       number = number.to_i
       ary = []
