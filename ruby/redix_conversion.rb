@@ -66,6 +66,19 @@ after_number_b =
     else
       n_ary.reverse.each_with_index.inject(0) { |sum, (elem, i)| sum + (elem.to_i * original_radix**i) }
     end
+  elsif original_radix.ten? && after_radix.not_ten?
+    # number == 0 のとき？
+    if point_index.nil?
+      number = number.to_i
+      ary = []
+      until number.zero?
+        n = number % after_radix
+        ary.unshift(n)
+        number /= after_radix
+      end
+
+      ary.join
+    end
   end
 
 puts # 空行
