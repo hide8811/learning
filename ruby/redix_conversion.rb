@@ -67,9 +67,31 @@ after_number_b =
       n_ary.reverse.each_with_index.inject(0) { |sum, (elem, i)| sum + (elem.to_i * original_radix**i) }
     end
   elsif original_radix.ten? && after_radix.not_ten?
-    if point_index.nil?
+    if point_index
+      integral = number.to_i
+      decimal = (BigDecimal(number) - BigDecimal(integral.to_s)).to_f
+
+      after_integral = []
+      after_decimal = ''
+
+      until integral.zero?
+        i = integral % after_radix
+        after_integral.unshift(i)
+        integral /= after_radix
+      end
+
+      until decimal.zero?
+        decimal = (BigDecimal(decimal.to_s) * BigDecimal(after_radix.to_s)).to_f
+        i = decimal.to_i.to_s
+        after_decimal += i
+        decimal = (BigDecimal(decimal.to_s) - BigDecimal(i)).to_f
+      end
+
+      "#{after_integral.join}.#{after_decimal}"
+    else
       number = number.to_i
       ary = []
+
       until number.zero?
         n = number % after_radix
         ary.unshift(n)
