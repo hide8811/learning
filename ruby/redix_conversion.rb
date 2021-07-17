@@ -13,6 +13,44 @@ class Integer
   end
 end
 
+def integral_n_to_ten(integral_ary, radix)
+  integral_ary.reverse.each_with_index.inject(0) { |sum, (elem, i)| sum + (elem.to_i * radix**i) }
+end
+
+def decimal_n_to_ten(decimal_ary, radix)
+  decimal_ary.each_with_index.inject(0) do |sum, (elem, i)|
+    i += 1
+    product = BigDecimal(elem) * BigDecimal(radix.to_s)**-BigDecimal(i.to_s)
+
+    (BigDecimal(sum.to_s) + BigDecimal(product.to_s)).to_f
+  end
+end
+
+def integral_ten_to_n(integral, radix)
+  int = []
+
+  until integral.zero?
+    i = integral % radix
+    int.unshift(i)
+    integral /= radix
+  end
+
+  int.join
+end
+
+def decimal_ten_to_n(decimal, radix)
+  dec = ''
+
+  until decimal.zero?
+    decimal = (BigDecimal(decimal.to_s) * BigDecimal(radix.to_s)).to_f
+    i = decimal.to_i.to_s
+    dec += i
+    decimal = (BigDecimal(decimal.to_s) - BigDecimal(i)).to_f
+  end
+
+  dec
+end
+
 print '基数:'
 original_radix = gets.to_i
 print '数値:'
@@ -50,56 +88,41 @@ point_index = n_ary.index('.')
 after_number_b =
   if original_radix.not_ten? && after_radix.ten?
     if point_index
-      integral = n_ary[0..(point_index - 1)]
-      decimal = n_ary[(point_index + 1)..-1]
+      integral_ary = n_ary[0..(point_index - 1)]
+      decimal_ary = n_ary[(point_index + 1)..-1]
 
-      integral_sum =
-        integral.reverse.each_with_index.inject(0) { |sum, (elem, i)| sum + (elem.to_i * original_radix**i) }
-
-      decimal_sum =
-        decimal.each_with_index.inject(0) do |sum, (elem, i)|
-          product = BigDecimal(elem) * BigDecimal(original_radix.to_s)**-BigDecimal((i + 1).to_s)
-          (BigDecimal(sum.to_s) + BigDecimal(product.to_s)).to_f
-        end
-
-      integral_sum + decimal_sum
+      integral_n_to_ten(integral_ary, original_radix) + decimal_n_to_ten(decimal_ary, original_radix)
     else
-      n_ary.reverse.each_with_index.inject(0) { |sum, (elem, i)| sum + (elem.to_i * original_radix**i) }
+      integral_n_to_ten(n_ary, original_radix)
     end
+
   elsif original_radix.ten? && after_radix.not_ten?
     if point_index
       integral = number.to_i
       decimal = (BigDecimal(number) - BigDecimal(integral.to_s)).to_f
 
-      after_integral = []
-      after_decimal = ''
-
-      until integral.zero?
-        i = integral % after_radix
-        after_integral.unshift(i)
-        integral /= after_radix
-      end
-
-      until decimal.zero?
-        decimal = (BigDecimal(decimal.to_s) * BigDecimal(after_radix.to_s)).to_f
-        i = decimal.to_i.to_s
-        after_decimal += i
-        decimal = (BigDecimal(decimal.to_s) - BigDecimal(i)).to_f
-      end
-
-      "#{after_integral.join}.#{after_decimal}"
+      "#{integral_ten_to_n(integral, after_radix)}.#{decimal_ten_to_n(decimal, after_radix)}"
     else
       number = number.to_i
-      ary = []
 
-      until number.zero?
-        n = number % after_radix
-        ary.unshift(n)
-        number /= after_radix
-      end
-
-      ary.join
+      integral_ten_to_n(number, after_radix)
     end
+
+  # original_radix.not_ten? && after_radix.not_ten?
+  elsif point_index
+    integral_ary = n_ary[0..(point_index - 1)]
+    decimal_ary = n_ary[(point_index + 1)..-1]
+
+    num = integral_n_to_ten(integral_ary, original_radix) + decimal_n_to_ten(decimal_ary, original_radix)
+
+    integral = num.to_i
+    decimal = (BigDecimal(num.to_s) - BigDecimal(integral.to_s)).to_f
+
+    "#{integral_ten_to_n(integral, after_radix)}.#{decimal_ten_to_n(decimal, after_radix)}"
+  else
+    num = integral_n_to_ten(n_ary, original_radix)
+
+    integral_ten_to_n(num, after_radix)
   end
 
 puts # 空行
