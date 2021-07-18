@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'bigdecimal'
+require 'bigdecimal/util'
 
 # クラスメソッドを追加
 class Integer
@@ -19,10 +19,9 @@ end
 
 def decimal_n_to_ten(decimal_ary, radix)
   decimal_ary.each_with_index.inject(0) do |sum, (elem, i)|
-    i += 1
-    product = BigDecimal(elem) * BigDecimal(radix.to_s)**-BigDecimal(i.to_s)
+    product = elem.to_d * radix.to_d**-(i + 1).to_d
 
-    (BigDecimal(sum.to_s) + BigDecimal(product.to_s)).to_f
+    (sum.to_d + product.to_d).to_f
   end
 end
 
@@ -42,10 +41,10 @@ def decimal_ten_to_n(decimal, radix)
   dec = ''
 
   until decimal.zero?
-    decimal = (BigDecimal(decimal.to_s) * BigDecimal(radix.to_s)).to_f
+    decimal = (decimal.to_d * radix.to_d).to_f
     i = decimal.to_i.to_s
     dec += i
-    decimal = (BigDecimal(decimal.to_s) - BigDecimal(i)).to_f
+    decimal = (decimal.to_d - i.to_d).to_f
   end
 
   dec
@@ -99,7 +98,7 @@ after_number_b =
   elsif original_radix.ten? && after_radix.not_ten?
     if point_index
       integral = number.to_i
-      decimal = (BigDecimal(number) - BigDecimal(integral.to_s)).to_f
+      decimal = (number.to_d - integral.to_d).to_f
 
       "#{integral_ten_to_n(integral, after_radix)}.#{decimal_ten_to_n(decimal, after_radix)}"
     else
@@ -116,7 +115,7 @@ after_number_b =
     num = integral_n_to_ten(integral_ary, original_radix) + decimal_n_to_ten(decimal_ary, original_radix)
 
     integral = num.to_i
-    decimal = (BigDecimal(num.to_s) - BigDecimal(integral.to_s)).to_f
+    decimal = (num.to_d - integral.to_d).to_f
 
     "#{integral_ten_to_n(integral, after_radix)}.#{decimal_ten_to_n(decimal, after_radix)}"
   else
