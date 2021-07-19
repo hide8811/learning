@@ -58,6 +58,11 @@ def decimal_ten_to_n(decimal, radix)
   until decimal.zero?
     int, decimal, = (decimal.to_d * radix.to_d).to_f.disassembly
     dec += int.to_s
+
+    if dec.length > 20
+      dec += '...'
+      break
+    end
   end
 
   dec
