@@ -1,5 +1,42 @@
 # frozen_string_literal: true
 
+def decimal_split(number)
+  if number.include?('.')
+    int, dec = number.split('.')
+  else
+    int = number
+    dec = '0'
+  end
+
+  [int, dec]
+end
+
+def sum_ary(left, right)
+  left = left.split('').map(&:to_i)
+  right = right.split('').map(&:to_i)
+
+  left.zip(right).map(&:sum)
+end
+
+def sum_to_i(radix, left, right)
+  ary = sum_ary(left, right)
+
+  carry = 0
+
+  ary.reverse!.map! do |a|
+    a += carry
+
+    a -= radix if a >= radix
+    carry = a >= radix ? 1 : 0
+
+    a
+  end
+
+  ary.push(1) if carry == 1
+
+  ary.reverse.join
+end
+
 radix = gets.to_i
 
 # 1234+5678
@@ -7,36 +44,34 @@ formula = gets.chomp
 
 left, right = formula.split('+')
 
-if left.length > right.length
-  diff = left.length - right.length
-  right = ('0' * diff) + right
-elsif right.length > left.length
-  diff = right.length - left.length
-  left = ('0' * diff) + left
+left_int, left_dec = decimal_split(left)
+right_int, right_dec = decimal_split(right)
+
+# 整数
+if left_int.length > right_int.length
+  diff = left_int.length - right_int.length
+  right_int = ('0' * diff) + right_int
+elsif right_int.length > left_int.length
+  diff = right_int.length - left_int.length
+  left_int = ('0' * diff) + left_int
 end
 
-left = left.split('').map(&:to_i)
-right = right.split('').map(&:to_i)
+int = sum_to_i(radix, left_int, right_int)
 
-ary = left.zip(right).reverse
-
-carry = 0
-
-ary.map! do |a|
-  tmp = a.sum + carry
-
-  if tmp >= radix
-    tmp -= radix
-    carry = 1
-  else
-    carry = 0
-  end
-
-  tmp
+# 小数
+if left_dec.length > right_dec.length
+  diff = left_dec.length - right_dec.length
+  right_dec += ('0' * diff)
+elsif right_dec.length > left_dec.length
+  diff = right_dec.length - left_dec.length
+  left_dec += ('0' * diff)
 end
 
-ary.reverse!
+dec = sum_to_i(radix, left_dec, right_dec)
 
-ary.unshift(1) if carry == 1
+if dec.length != left_dec.length
+  dec = dec[1..-1]
+  int = (int.to_i + 1).to_s
+end
 
-puts ary.join
+puts dec.match?(/^0+$/) ? int : "#{int}.#{dec}".to_f
