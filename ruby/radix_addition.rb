@@ -1,5 +1,14 @@
 # frozen_string_literal: true
 
+# クラスメソッドを追加
+class Array
+  def change_number
+    num = ('0'..'9').to_a + ('A'..'Z').to_a
+
+    map { |i| num[i] }
+  end
+end
+
 def decimal_split(number)
   if number.include?('.')
     int, dec = number.split('.')
@@ -12,33 +21,46 @@ def decimal_split(number)
 end
 
 def sum_ary(left, right)
-  left = left.split('').map(&:to_i)
-  right = right.split('').map(&:to_i)
+  num = ('0'..'9').to_a + ('A'..'Z').to_a
+
+  left = left.split('').map { |n| num.index(n) }
+  right = right.split('').map { |n| num.index(n) }
 
   left.zip(right).map(&:sum)
 end
 
-def sum_to_i(radix, left, right)
+def carrying(num, radix)
+  if num >= radix
+    num -= radix
+    carry = 1
+  else
+    carry = 0
+  end
+
+  [num, carry]
+end
+
+def number_sum(radix, left, right)
   ary = sum_ary(left, right)
 
   carry = 0
 
-  ary.reverse!.map! do |a|
-    a += carry
+  new_ary = ary.reverse.map do |num|
+    num += carry
+    num, carry = carrying(num, radix)
 
-    a -= radix if a >= radix
-    carry = a >= radix ? 1 : 0
-
-    a
+    num
   end
 
-  ary.push(1) if carry == 1
+  new_ary.push(1) if carry == 1
 
-  ary.reverse.join
+  new_ary.reverse.change_number.join
 end
 
+print '基数：'
 radix = gets.to_i
 
+print '計算：'
 # 1234+5678
 formula = gets.chomp
 
@@ -56,7 +78,7 @@ elsif right_int.length > left_int.length
   left_int = ('0' * diff) + left_int
 end
 
-int = sum_to_i(radix, left_int, right_int)
+int = number_sum(radix, left_int, right_int)
 
 # 小数
 if left_dec.length > right_dec.length
@@ -67,11 +89,12 @@ elsif right_dec.length > left_dec.length
   left_dec += ('0' * diff)
 end
 
-dec = sum_to_i(radix, left_dec, right_dec)
+dec = number_sum(radix, left_dec, right_dec)
 
 if dec.length != left_dec.length
   dec = dec[1..-1]
   int = (int.to_i + 1).to_s
 end
 
+p int
 puts dec.match?(/^0+$/) ? int : "#{int}.#{dec}".to_f
