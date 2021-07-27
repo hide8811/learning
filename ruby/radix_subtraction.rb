@@ -6,9 +6,13 @@ class Array
     num_ary = ('0'..'9').to_a + ('a'..'z').to_a
 
     if self[0].is_a?(String)
-      map! { |n| num_ary.index(n) }
+      map! do |n|
+        n == '.' ? '.' : num_ary.index(n)
+      end
     else
-      map! { |n| num_ary[n] }
+      map! do |n|
+        n == '.' ? '.' : num_ary[n]
+      end
     end
   end
 end
@@ -63,11 +67,15 @@ def ary_subtraction(left, right, radix)
   carry = 0
 
   ary.map! do |le, ri|
-    le -= carry
+    if le == '.'
+      '.'
+    else
+      le -= carry
 
-    an, carry = subtraction(le, ri, radix)
+      an, carry = subtraction(le, ri, radix)
 
-    an
+      an
+    end
   end
 
   ary.reverse!
@@ -79,7 +87,7 @@ loop do
 
   exit if radix == 'exit'
 
-  unless ('2'..'36').cover?(radix)
+  unless ('2'..'36').include?(radix)
     puts 'error'
     puts '' # 空行
     next
@@ -92,7 +100,17 @@ loop do
   puts '-'
   right = gets.chomp.downcase
 
-  left_ary, right_ary = make_array(left, right)
+  if left.match(/^\d+\.\d+$/) && right.match(/^\d+\.\d+$/)
+    left_int, left_dec = left.split('.')
+    right_int, right_dec = right.split('.')
+
+    left_int_ary, right_int_ary = make_array(left_int, right_int)
+
+    left_ary = left_int_ary + ['.'] + left_dec.split('')
+    right_ary = right_int_ary + ['.'] + right_dec.split('')
+  else
+    left_ary, right_ary = make_array(left, right)
+  end
 
   left_ary, right_ary, sign = sign_check(left_ary, right_ary)
 
@@ -104,6 +122,7 @@ loop do
 
   num.sub!(/^0+/, '')
 
-  puts "#{sign}#{num}"
+  puts '' # 空行
+  puts "解: #{sign}#{num}"
   puts '' # 空行
 end
