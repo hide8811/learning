@@ -32,7 +32,15 @@ def sign_check(left_ary, right_ary)
   [left_ary, right_ary, sign]
 end
 
-def make_array(left, right)
+def disassembly(num)
+  ary = num.split('.')
+
+  ary.push('0') if ary.length == 1
+
+  ary
+end
+
+def align_digits(left, right)
   left_length = left.length
   right_length = right.length
 
@@ -46,10 +54,29 @@ def make_array(left, right)
     left = ('0' * diff) + left
   end
 
-  [left.split(''), right.split('')]
+  [left, right]
+end
+
+def make_array(left, right)
+  if left.match(/^\d+\.\d+$/) || right.match(/^\d+\.\d+$/)
+    left_int, left_dec = disassembly(left)
+    right_int, right_dec = disassembly(right)
+
+    left_int, right_int = align_digits(left_int, right_int)
+
+    left_ary = "#{left_int}.#{left_dec}".split('')
+    right_ary = "#{right_int}.#{right_dec}".split('')
+  else
+    left_ary, right_ary = align_digits(left, right).map { |a| a.spmit('') }
+  end
+
+  [left_ary, right_ary]
 end
 
 def subtraction(left, right, radix)
+  left = 0 if left.nil?
+  right = 0 if right.nil?
+
   if left >= right
     ans = left - right
     carry = 0
@@ -62,11 +89,9 @@ def subtraction(left, right, radix)
 end
 
 def ary_subtraction(left, right, radix)
-  ary = left.zip(right).reverse
-
   carry = 0
 
-  ary.map! do |le, ri|
+  left.zip(right).reverse.map! do |le, ri|
     if le == '.'
       '.'
     else
@@ -76,9 +101,7 @@ def ary_subtraction(left, right, radix)
 
       an
     end
-  end
-
-  ary.reverse!
+  end.reverse
 end
 
 loop do
@@ -100,17 +123,7 @@ loop do
   puts '-'
   right = gets.chomp.downcase
 
-  if left.match(/^\d+\.\d+$/) && right.match(/^\d+\.\d+$/)
-    left_int, left_dec = left.split('.')
-    right_int, right_dec = right.split('.')
-
-    left_int_ary, right_int_ary = make_array(left_int, right_int)
-
-    left_ary = left_int_ary + ['.'] + left_dec.split('')
-    right_ary = right_int_ary + ['.'] + right_dec.split('')
-  else
-    left_ary, right_ary = make_array(left, right)
-  end
+  left_ary, right_ary = make_array(left, right)
 
   left_ary, right_ary, sign = sign_check(left_ary, right_ary)
 
@@ -121,6 +134,9 @@ loop do
   num = num_ary.change_numbers!.join
 
   num.sub!(/^0+/, '')
+  num.sub!(/(?<=\.0)0+$/, '')
+
+  num.sub!(/0+$/, '') if num.match?(/\.\d*[1-9]+0+$/)
 
   puts '' # 空行
   puts "解: #{sign}#{num}"
