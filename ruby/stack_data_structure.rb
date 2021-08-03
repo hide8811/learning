@@ -6,6 +6,15 @@
 # push: データを入れる
 # pop: データを取り出す
 
+def disassembly(val)
+  value = val.split
+  flag = value.shift
+
+  value = value[0].to_i if flag == 'pop'
+
+  [flag, value]
+end
+
 data = []
 
 loop do
@@ -17,24 +26,27 @@ loop do
   exit if val == 'e'
 
   unless val.match(/^push /) || val.match(/^pop \d+/)
-    puts 'error: push or pop or exit'
+    puts 'error: push or pop or e'
     puts '' # 空行
     next
   end
 
-  value = val.split
-  flag = value.shift
+  flag, value = disassembly(val)
 
   if flag == 'push'
     data += value
   else
-    if value[0].to_i > data.length
+    if value > data.length
       puts 'error: 要素が足りません。'
       puts '' # 空行
       next
     end
 
-    puts data.pop(value[0].to_i)
+    pop_val = []
+
+    value.times { pop_val << data.pop }
+
+    puts pop_val
   end
 
   puts '' # 空行
