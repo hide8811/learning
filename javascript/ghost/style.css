@@ -1,0 +1,22 @@
+.img {
+  width: 300px;
+  height: 320px;
+}
+
+.ghorst {
+  width: 300px;
+  height: 320px;
+  transition: all 3s;
+}
+
+.hide {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.appear {
+  width: 300px;
+  height: 320px;
+  opacity: 1;
+}
