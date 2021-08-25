@@ -3,3 +3,7 @@ AllCops:
 
 Style/AsciiComments:
   Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - !ruby/regexp /.*spec\.rb$/
